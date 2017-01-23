@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>cn.sjjy.edu</groupId>
+    <artifactId>manager-platform</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>manager-portal</artifactId>
+  <name>manager-portal</name>
+  <url>http://maven.apache.org</url>
+  <packaging>war</packaging>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>cn.sjjy.edu</groupId>
+            <artifactId>edu-web-framework</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.sjjy.edu</groupId>
+            <artifactId>account-biz</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+</project>

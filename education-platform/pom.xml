@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>cn.sjjy.edu</groupId>
+	<artifactId>education-platform</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<packaging>pom</packaging>
+	<modules>
+		<module>education-portal</module>
+		<module>edu-web-framework</module>
+	</modules>
+
+	<name>education-platform</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<et.version>0.0.1-SNAPSHOT</et.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<useDefaultDelimiters>false</useDefaultDelimiters>
+		<spring-framework.version>4.2.1.RELEASE</spring-framework.version>
+		<slf4j.version>1.7.5</slf4j.version>
+		<logback.version>1.1.7</logback.version>
+		<fastjson.version>1.2.9</fastjson.version>
+		<mybatis.version>3.2.8</mybatis.version>
+		<spring-mybatis.version>1.2.2</spring-mybatis.version>
+		<mysql.version>5.1.21</mysql.version>
+		<c3p0-version>0.9.1.2</c3p0-version>
+		<org.modelmapper.version>0.7.2</org.modelmapper.version>
+		<junit.version>4.10</junit.version>
+		<org.slf4j.version>1.7.12</org.slf4j.version>
+		<guava.version>18.0</guava.version>
+		<lombok.version>1.16.8</lombok.version>
+		<javaee-web-api.version>7.0</javaee-web-api.version>
+		<jackson.version>2.8.2</jackson.version>
+		<swagger.version>2.2.2</swagger.version>
+	</properties>
+
+	<build>
+		<finalName>edu-platform</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+					<compilerArgs>
+						<arg>-parameters</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
+	
+</project>

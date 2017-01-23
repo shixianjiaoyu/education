@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sjjy.edu.auth.dao.AuthItemDao">
+	<resultMap id="authItemMap" type="cn.sjjy.edu.auth.po.AuthItemPo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="data" property="data" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+		<result column="ctime" property="createdTime" jdbcType="TIMESTAMP" />
+		<result column="mtime" property="updatedTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="select_sql">
+		SELECT id, name, type, data, description, ctime, mtime, is_deleted from <include refid="tbl_name"/>
+	</sql>
+	
+	<sql id="tbl_name">
+        auth_item
+    </sql>
+    
+    <sql id="where_sql">
+        <where>
+            <if test="query.itemIdList != null">
+                <if test="query.itemIdList.size() == 0">
+                    AND 1 = 0
+                </if>
+                <if test="query.itemIdList.size() == 1">
+                    AND id =
+                    <foreach collection="query.itemIdList" index="" open="" close="" separator="" item="item">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="query.itemIdList.size() > 1">
+                    AND id IN
+                    <foreach collection="query.itemIdList" index="" open="(" close=")" separator="," item="item">
+                        #{item}
+                    </foreach>
+                </if>
+            </if>
+            <if test="query.typeList != null">
+                <if test="query.typeList.size() == 0">
+                    AND 1 = 0
+                </if>
+                <if test="query.typeList.size() == 1">
+                    AND type =
+                    <foreach collection="query.typeList" index="" open="" close="" separator="" item="type">
+                        #{type}
+                    </foreach>
+                </if>
+                <if test="query.TypeList.size() > 1">
+                    AND type IN
+                    <foreach collection="query.typeList" index="" open="(" close=")" separator="," item="type">
+                        #{type}
+                    </foreach>
+                </if>
+            </if>
+            <if test="query.isDeleted != null">
+                AND is_deleted = #{query.isDeleted}
+            </if>
+        </where>
+    </sql>
+    
+    <select id="query" parameterType="map" resultMap="authItemMap">
+
+        <include refid="select_sql"/>
+        <include refid="where_sql"/>
+
+    </select>
+    
+    <select id="getById" parameterType="map" resultMap="authItemMap">
+
+        <include refid="select_sql"/>
+        WHERE id = #{itemId} AND is_deleted = 0;
+
+    </select>
+
+	<insert id="insert" parameterType="cn.sjjy.edu.auth.po.AuthItemPo"
+		useGeneratedKeys="true" keyProperty="po.id">
+		INSERT INTO
+		<include refid="tbl_name"/>
+		(name, type, data, description)
+		VALUES
+		(
+		#{po.name},
+		#{po.type},
+		#{po.data},
+		#{po.description}
+		)
+	</insert>
+
+	<update id="update" parameterType="java.lang.Integer">
+		UPDATE <include refid="tbl_name"/> SET
+		<trim suffixOverrides=",">
+			<if test="po.name!=null">
+				name=#{po.name},
+			</if>
+			<if test="po.type!=null">
+				type=#{po.type},
+			</if>
+			<if test="po.data!=null">
+				data=#{po.data},
+			</if>
+			<if test="po.description!=null">
+				description=#{po.description},
+			</if>
+		</trim>
+		WHERE id=#{po.id} AND is_deleted=0;
+	</update>
+
+	<update id="delete" parameterType="java.lang.Integer">
+		UPDATE <include refid="tbl_name"/> SET
+		is_deleted=1
+		WHERE id=#{itemId}
+	</update>
+
+</mapper>

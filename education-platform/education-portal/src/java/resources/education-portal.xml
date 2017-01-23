@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+               http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+               http://www.springframework.org/schema/context
+               http://www.springframework.org/schema/context/spring-context-3.0.xsd
+               http://www.springframework.org/schema/tx
+	           http://www.springframework.org/schema/tx/spring-tx.xsd
+               http://www.springframework.org/schema/mvc
+               http://www.springframework.org/schema/mvc/spring-mvc.xsd
+               http://www.springframework.org/schema/util
+			   http://www.springframework.org/schema/util/spring-util-3.0.xsd
+			   http://www.springframework.org/schema/aop
+               http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:component-scan base-package="cn.sjjy.edu"/>
+
+    <tx:annotation-driven/>
+    <mvc:default-servlet-handler/>
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+
+            <bean class="cn.sjjy.edu.web.framework.core.ContextWebArgumentResolver" />
+
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
+
+    <!--<util:properties id="settings" location="classpath:conf.properties"></util:properties>-->
+    <bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:education-portal.properties</value>
+				<value>classpath:database.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding" value="UTF-8" />
+		<property name="ignoreResourceNotFound" value="false" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+    <bean id="webapi_security" class="cn.sjjy.edu.web.framework.filter.WebAPISecurityFilter">
+        <property name="salesType" value="CPM"/>
+    </bean>
+
+    <bean id="base_filter" class="cn.sjjy.edu.web.framework.filter.WebApiFilter">
+    </bean>
+
+    <bean id="documentationConfig" class="cn.sjjy.edu.web.framework.config.SwaggerConfig"/>
+    <!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+    <property name="maxUploadSize" value="${ad.bfs.file.max.upload.size}" />
+    <property name="maxInMemorySize" value="${ad.bfs.file.max.in.memory.size}"/> 
+	</bean> -->
+
+    <bean id="operatorType" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="cn.sjjy.edu.common.enums.OperatorType.ADVERTISERS" />
+    </bean>
+    <import resource="classpath:account.xml"/>
+</beans>

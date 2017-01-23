@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sjjy.edu.auth.dao.AuthAssignmentDao">
+	<resultMap id="authAssignmentMap" type="cn.sjjy.edu.auth.po.AuthAssignmentPo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="item_id" property="itemId" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="select_sql">
+		SELECT id, item_id, user_id from <include refid="tbl_name"/>
+	</sql>
+	
+	<sql id="tbl_name">
+        auth_assignment
+    </sql>
+    
+    <select id="getInItemIds" parameterType="map" resultMap="authAssignmentMap">
+
+        <include refid="select_sql"/>
+        <where>
+        	AND item_id IN
+            <foreach collection="itemIds" index="" open="(" close=")" separator="," item="itemId">
+                #{itemId}
+            </foreach>
+        </where>
+
+    </select>
+    
+    <select id="getInUserIds" parameterType="map" resultMap="authAssignmentMap">
+
+        <include refid="select_sql"/>
+        <where>
+        	AND user_id IN
+            <foreach collection="userIds" index="" open="(" close=")" separator="," item="userId">
+                #{userId}
+            </foreach>
+        </where>
+
+    </select>
+    
+    <insert id="batchInsert" parameterType="map">
+		INSERT INTO
+		<include refid="tbl_name"/>
+		(item_id, user_id)
+		VALUES
+		<foreach item="itemId" index="index" collection="roleIds"
+	                 open="" separator="," close="">
+        (
+        #{itemId},
+        #{userId}
+        )
+        </foreach>
+	</insert>
+
+	<update id="deleteByUserId" parameterType="java.lang.Integer">
+		DELETE FROM <include refid="tbl_name"/>
+		WHERE user_id=#{userId}
+	</update>
+    
+
+	<insert id="insert" parameterType="cn.sjjy.edu.auth.po.AuthAssignmentPo"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		<include refid="tbl_name"/>
+		(item_id, user_id)
+		VALUES
+		(
+		#{itemId},
+		#{userId}
+		)
+	</insert>
+
+	<update id="delete" parameterType="java.lang.Integer">
+		DELETE FROM <include refid="tbl_name"/>
+		WHERE id=#{itemId}
+	</update>
+
+</mapper>

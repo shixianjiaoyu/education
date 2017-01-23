@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sjjy.edu.account.dao.AccountDao">
+	<resultMap id="accountMap" type="cn.sjjy.edu.account.po.AccountPo">
+		<id column="account_id" property="accountId" jdbcType="INTEGER" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="password_strength" property="passwordStrength"
+			jdbcType="VARCHAR" />
+		<result column="salt" property="salt" jdbcType="VARCHAR" />
+		<result column="salt_password" property="saltPassword"
+			jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="ctime" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="mtime" property="updatedAt" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="all_columns">
+		`account_id`,username,`mobile`,`password_strength`,`salt`,`salt_password`,`status`,`ctime`,`mtime`,`is_deleted`
+	</sql>
+
+	<select id="get" resultMap="accountMap">
+		SELECT
+		<include refid="all_columns" />
+		FROM acc_account
+		WHERE account_id=#{account_id} and is_deleted=0
+	</select>
+
+	<select id="getByMobile" resultMap="accountMap">
+		SELECT
+		<include refid="all_columns" />
+		FROM acc_account
+		WHERE mobile=#{mobile} and is_deleted=0
+	</select>
+
+	<select id="getByUsername" resultMap="accountMap">
+		SELECT
+		<include refid="all_columns" />
+		FROM acc_account
+		WHERE username=#{username} and is_deleted=0
+	</select>
+
+	<insert id="insert" parameterType="cn.sjjy.edu.account.po.AccountPo"
+		useGeneratedKeys="true" keyProperty="accountId">
+		INSERT INTO
+		acc_account(username,`mobile`,`password_strength`,`salt`,`salt_password`,`status`,`is_deleted`)
+		VALUES
+		(
+		#{username},
+		#{mobile},
+		#{passwordStrength},
+		#{salt},
+		#{saltPassword},
+		#{status},
+		0
+		)
+	</insert>
+
+	<update id="update" parameterType="java.lang.Integer">
+		UPDATE acc_account SET
+		<trim suffixOverrides=",">
+			<if test="username!=null">
+				username=#{username}
+			</if>
+			<if test="mobile!=null">
+				`mobile`=#{mobile},
+			</if>
+			<if test="passwordStrength!=null">
+				`password_strength`=#{passwordStrength},
+			</if>
+			<if test="salt!=null">
+				`salt`=#{salt},
+			</if>
+			<if test="saltPassword!=null">
+				`salt_password`=#{saltPassword},
+			</if>
+			<if test="status!=null">
+				`status`=#{status},
+			</if>
+		</trim>
+		WHERE account_id=#{accountId} AND is_deleted=0
+	</update>
+
+	<update id="delete" parameterType="java.lang.Integer">
+		UPDATE acc_account SET
+		is_deleted=1
+		WHERE account_id=#{accountId}
+	</update>
+
+	<select id="getList" resultMap="accountMap">
+		SELECT
+		<include refid="all_columns" />
+		FROM acc_account
+		WHERE is_deleted=0
+	</select>
+
+	<select id="getInIds" resultMap="accountMap">
+		SELECT
+		<include refid="all_columns" />
+		FROM acc_account
+		WHERE
+		account_id IN
+		<foreach collection="account_ids" item="account_id" index="index"
+			open="(" separator="," close=")">
+			#{account_id}
+		</foreach>
+		and is_deleted=0
+
+	</select>
+
+	<select id="getCount" resultMap="accountMap">
+		SELECT
+		COUNT(1)
+		FROM acc_account
+		WHERE is_deleted=0
+	</select>
+	
+	<select id="getByPage" resultMap="accountMap">
+		SELECT
+		<include refid="all_columns" />
+		FROM acc_account
+		WHERE is_deleted=0
+		<if test="page !=null and page.limit != null and page.offset != null">
+            LIMIT #{page.offset},#{page.limit}
+        </if>
+		
+	</select>
+
+</mapper>

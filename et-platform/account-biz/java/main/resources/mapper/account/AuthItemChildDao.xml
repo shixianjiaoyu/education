@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sjjy.edu.auth.dao.AuthItemChildDao">
+	<resultMap id="AuthItemChildMap" type="cn.sjjy.edu.auth.po.AuthItemChildPo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="parent" property="parent" jdbcType="INTEGER" />
+		<result column="child" property="child" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="select_sql">
+		SELECT id, parent, child from <include refid="tbl_name"/>
+	</sql>
+	
+	<sql id="tbl_name">
+        auth_item_child
+    </sql>
+    
+    <select id="getInParentIds" parameterType="map" resultMap="AuthItemChildMap">
+
+        <include refid="select_sql"/>
+        <where>
+        	AND parent IN
+            <foreach collection="parentIds" index="" open="(" close=")" separator="," item="pid">
+                #{pid}
+            </foreach>
+        </where>
+
+    </select>
+
+	<insert id="batchInsert" parameterType="map">
+		INSERT INTO
+		<include refid="tbl_name"/>
+		(parent, child)
+		VALUES
+		<foreach item="itemId" index="index" collection="pointIds"
+	                 open="" separator="," close="">
+        (
+        #{parentId},
+        #{itemId}
+        )
+        </foreach>
+	</insert>
+
+	<update id="deleteByParentId" parameterType="java.lang.Integer">
+		DELETE FROM <include refid="tbl_name"/>
+		WHERE parent=#{parentId}
+	</update>
+
+</mapper>

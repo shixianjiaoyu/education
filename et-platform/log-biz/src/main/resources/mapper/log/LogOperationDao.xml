@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sjjy.edu.log.dao.LogOperationDao">
+    <resultMap id="accountMap" type="cn.sjjy.edu.log.po.LogOperationVo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="table_name" property="tableName" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="operator_username" property="operatorUsername" jdbcType="VARCHAR"/>
+        <result column="operator_type" property="operatorType" jdbcType="INTEGER"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+        <result column="ctime" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="mtime" property="updatedAt" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="cn.sjjy.edu.log.po.LogOperationVo">
+        INSERT INTO
+        log_operation(`table_name`,`type`,`operator_username`,`operator_type`,`value`,`is_deleted`)
+        VALUES
+        (
+        #{tableName},
+        #{type},
+        #{operatorUsername},
+        #{operatorType},
+        #{value},
+        0
+        )
+    </insert>
+
+
+</mapper>
