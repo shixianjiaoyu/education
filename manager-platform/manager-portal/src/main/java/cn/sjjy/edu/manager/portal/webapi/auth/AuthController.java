@@ -22,6 +22,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import cn.sjjy.edu.account.common.AuthItemType;
 import cn.sjjy.edu.account.dto.AccountDto;
 import cn.sjjy.edu.account.service.IAccountService;
+import cn.sjjy.edu.auth.annotation.SolarAuth;
 import cn.sjjy.edu.auth.dto.AuthItemChildDto;
 import cn.sjjy.edu.auth.dto.AuthItemDto;
 import cn.sjjy.edu.auth.service.IAuthItemService;
@@ -50,7 +51,7 @@ public class AuthController extends BaseController {
 	@Autowired
 	private IAuthItemService authItemService;
 
-	// @SolarAuth(points = {"cpm_view_account"})
+	@SolarAuth(points = {"cpm_view_role"})
 	@ApiOperation("角色列表")
 	@RequestMapping(value = "/roles", method = RequestMethod.GET)
 	public @ResponseBody Response<List<RoleVo>> roleList(Context context) throws ServiceException {
@@ -59,7 +60,7 @@ public class AuthController extends BaseController {
 		if (!CollectionUtils.isEmpty(dtoList)) {
 			List<Integer> itemIds = dtoList.stream().map(AuthItemDto::getId).collect(Collectors.toList());
 			Map<Integer, List<AccountDto>> itemUserMap = authItemService.getItemUserMapInItemIds(itemIds);
-			dtoList.stream().map(dto -> {
+			roleVoList = dtoList.stream().map(dto -> {
 				List<Meta> metas = Collections.emptyList();
 				if (itemUserMap.containsKey(dto.getId())) {
 					metas = itemUserMap.get(dto.getId()).stream()
@@ -67,7 +68,7 @@ public class AuthController extends BaseController {
 							.collect(Collectors.toList());
 				}
 				return RoleVo.builder().id(dto.getId()).name(dto.getName()).description(dto.getDescription())
-						.memberList(metas);
+						.memberList(metas).build();
 			}).collect(Collectors.toList());
 		}
 		return Response.SUCCESS(roleVoList);

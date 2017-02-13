@@ -3,6 +3,7 @@ package cn.sjjy.edu.auth.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cn.sjjy.edu.account.dto.AccountDto;
 import cn.sjjy.edu.auth.dto.AuthItemChildDto;
@@ -33,4 +34,6 @@ public interface IAuthItemService {
 	void updateRolePoint(Operator operator, Integer roleId, List<Integer> pointIds) throws ServiceException;
 
 	void updateUserRole(Operator operator, Integer userId, List<Integer> roleIds) throws ServiceException;
+
+	Set<String> getPointsByAccountId(Integer accountId);
 }

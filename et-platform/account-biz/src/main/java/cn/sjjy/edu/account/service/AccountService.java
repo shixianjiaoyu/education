@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ import cn.sjjy.edu.account.dto.UpdateAccountDto;
 import cn.sjjy.edu.account.dto.UpdatePasswordDto;
 import cn.sjjy.edu.account.exception.AccountExceptionCode;
 import cn.sjjy.edu.account.po.AccountPo;
+import cn.sjjy.edu.auth.service.IAuthItemService;
 import cn.sjjy.edu.common.AccountStatus;
 import cn.sjjy.edu.common.PasswordStrength;
 import cn.sjjy.edu.common.bean.Operator;
@@ -52,6 +54,8 @@ public class AccountService implements IAccountService {
 	private AccountDao accountDao;
 	@Autowired
 	private PasswordComponent passwordComponent;
+	@Autowired
+	private IAuthItemService authItemService;
 	@Autowired
 	private ILogService logService;
 
@@ -147,8 +151,13 @@ public class AccountService implements IAccountService {
 			LOGGER.error("TokenUtil.createToken.error", e);
 			throw new ServiceException(AccountExceptionCode.SYSTEM_ERROR);
 		}
-
-		return LoginInfoDto.builder().accountId(accountPo.getAccountId()).accessToken(token).build();
+		Set<String> pointSet = authItemService.getPointsByAccountId(accountPo.getAccountId());
+		return LoginInfoDto.builder()
+				.accountId(accountPo.getAccountId())
+				.userName(accountPo.getUsername())
+				.accessToken(token)
+				.points(pointSet)
+				.build();
 	}
 
 	@Override

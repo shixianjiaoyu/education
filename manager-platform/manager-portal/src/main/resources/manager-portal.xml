@@ -40,6 +40,39 @@
 
 	<bean id="webapi_security" class="cn.sjjy.edu.web.framework.filter.WebAPISecurityFilter">
 	</bean>
+	
+	<mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/web_api/**"/>
+            <bean id="solarInterceptor" class="cn.sjjy.edu.auth.springmvc.SolarInterceptor" init-method="init">
+                <property name="authFailHandler">
+                    <bean class="cn.sjjy.edu.auth.springmvc.StdSolarAuthFailHandler"/>
+                </property>
+                <property name="covers">
+                    <map>
+                        <entry key="cpm_modify_slot">
+                            <list><value>cpm_view_slot</value></list>
+                        </entry>
+                        <entry key="cpm_view_creative_list">
+                            <list><value>cpm_view_slot_group</value></list>
+                        </entry>
+                        <entry key="cpm_modify_target">
+                            <list><value>cpm_view_target</value></list>
+                        </entry>
+                        <entry key="cpm_modify_target_detail">
+                            <list><value>cpm_view_target</value></list>
+                        </entry>
+                        <entry key="cpm_create_pricing">
+                            <list><value>cpm_view_target</value></list>
+                        </entry>
+                        <entry key="cpm_modify_slot_group">
+                            <list><value>cpm_view_template</value></list>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 	<bean id="base_filter" class="cn.sjjy.edu.web.framework.filter.WebApiFilter">
     </bean>

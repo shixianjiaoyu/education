@@ -65,7 +65,7 @@ public class AuthItemServiceTest extends BaseTest {
 		.name("test-role-tes")
 		.type(AuthItemType.ROLE.getCode())
 		.data("")
-		.description("测试权限-1").build();
+		.description("测试权限-1999").build();
     	authItemService.updateRole(operator, dto);
     }
     

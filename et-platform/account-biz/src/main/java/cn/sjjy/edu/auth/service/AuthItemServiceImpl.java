@@ -234,4 +234,22 @@ public class AuthItemServiceImpl implements IAuthItemService {
 		}
 	}
 
+	@Override
+	public Set<String> getPointsByAccountId(Integer accountId) {
+		Set<String> points = Collections.emptySet();
+		List<AuthAssignmentPo> authAssignmentPos = authAssignmentDao.getInUserIds(Lists.newArrayList(accountId));
+		if (!CollectionUtils.isEmpty(authAssignmentPos)) {
+			List<Integer> roleIds = authAssignmentPos.stream().map(po -> po.getItemId()).collect(Collectors.toList());
+			List<AuthItemChildPo> authItemChildPos = authItemChildDao.getInParentIds(roleIds);
+			if (!CollectionUtils.isEmpty(authItemChildPos)) {
+				List<Integer> itemIds = authItemChildPos.stream().map(po -> po.getChild()).collect(Collectors.toList());
+				List<AuthItemPo> authItemPos = authItemDao.query(AuthItemPoQuery.builder().isDeleted(false).itemIdList(itemIds).build());
+				if (!CollectionUtils.isEmpty(authItemPos)) {
+					points = authItemPos.stream().map(po -> po.getData()).collect(Collectors.toSet());
+				}
+			}
+		}
+		return points;
+	}
+
 }

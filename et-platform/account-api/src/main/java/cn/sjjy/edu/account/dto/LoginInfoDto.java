@@ -1,5 +1,7 @@
 package cn.sjjy.edu.account.dto;
 
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginInfoDto {
     private Integer accountId;
+    private String userName;
     private String accessToken;
+    private Set<String> points;
 }
